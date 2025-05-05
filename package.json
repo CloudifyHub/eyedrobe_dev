@@ -6,8 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon app.js",
     "start:prod": "node app.js",
-    "db:migrate": "npx sequelize-cli db:migrate --env development",
-    "db:migrate:prod": "npx sequelize-cli db:migrate --env production"
+    "db:migrate": "npx sequelize-cli db:migrate"
   },
   "keywords": [],
   "author": "",
