@@ -6,7 +6,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "nodemon app.js",
     "start:prod": "node app.js",
-    "db:migrate": "npx sequelize-cli db:migrate"
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:migrate:undo": "npx sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "npx sequelize-cli db:migrate:undo:all",
+    "db:migrate:status": "npx sequelize-cli db:migrate:status",
+    "db:migrate:stores": "npx sequelize-cli db:migrate --name 20250505084650-create-stores",
+    "db:migrate:users": "npx sequelize-cli db:migrate --name 20250504225106-create-users",
+    "db:migrate:users:undo": "npx sequelize-cli db:migrate:undo:all --to 20250504225106-create-users",
+    "db:migrate:stores:undo": "npx sequelize-cli db:migrate:undo:all --to 20250505084650-create-stores"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +26,8 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.15.6",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "sequelize": "^6.37.7",
+    "supabase": "^2.22.12"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
