@@ -1,10 +1,9 @@
 const stores = require('../db/models/stores');
 const users = require('../db/models/users');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { products } = require('../db/models/products');
+const  productImages  = require('../db/models/product_images');
 
 //create a product
 const createProduct = catchAsync(async (req, res, next) => {
@@ -104,12 +103,25 @@ const getProductById = catchAsync(async (req, res, next) => {
         return next(new AppError('Product not found', 404));
     }
 
+    const productImagesUrls = await productImages.findAll({
+        where: {productId: productId},
+    });
+
+    
+
     const productResult = product.toJSON();
     delete productResult.deletedAt;
     delete productResult.updatedAt;
     delete productResult.createdBy;
     delete productResult.userId;
     delete productResult.storeId;
+    productResult.images = productImagesUrls.map(image => ({
+        id: image.id,
+        url: image.url
+    }));
+
+  
+
 
     return res.status(200).json({
         status: 'success',

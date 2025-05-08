@@ -158,6 +158,7 @@ const products = sequelize.define('products', {
 const defineAssociations = (models) => {
   products.belongsTo(models.users, { foreignKey: 'userId' });
   models.stores.hasMany(products, { foreignKey: 'storeId' });
+  products.hasMany(models.product_images, { foreignKey: 'product_id' });
 };
 
 module.exports = { products, defineAssociations };
