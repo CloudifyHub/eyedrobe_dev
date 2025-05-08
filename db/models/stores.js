@@ -118,4 +118,5 @@ const stores = sequelize.define('stores', {
   paranoid: true
 });
 
+
 module.exports = stores;

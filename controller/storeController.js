@@ -15,6 +15,19 @@ const createStore = catchAsync(async (req, res, next) => {
         return next(new AppError('All fields are required', 400));
     }
 
+    const user = await users.findOne({
+        where: {id: userId},
+        include: [stores]
+    });
+
+    if(!user){
+        return next(new AppError('User not found', 404));
+    }
+
+    if(user.stores && user.stores.length > 0){
+        return next(new AppError('User already has a store', 400));
+    }
+
     const newStore = await stores.create({
         userId: userId,
         name: body.name,
@@ -39,14 +52,41 @@ const createStore = catchAsync(async (req, res, next) => {
 //get all stores
 const getAllStores = catchAsync(async (req, res, next) => {
     const result = await stores.findAll({
-        include: users,
+        include: [users],
         where: {userId: req.user.id}
+    });
+
+    if(!result){
+        return next(new AppError('No stores found', 404));
+    }
+
+
+    const storeResults = result.map(store => {
+        const storeResult = store.toJSON();
+
+        //delete store fields
+        delete storeResult.deletedAt;
+        delete storeResult.updatedAt;
+        delete storeResult.createdBy;
+        delete storeResult.userId;
+
+        //delete user fields
+        delete storeResult.user.id;
+        delete storeResult.user.email;
+        delete storeResult.user.password;
+        delete storeResult.user.role;
+        delete storeResult.user.createdBy;
+        delete storeResult.user.updatedBy;
+        delete storeResult.user.deletedBy;
+        delete storeResult.user.deletedAt;
+
+        return storeResult;
     });
 
     return res.status(200).json({
         status: 'success',
         message: 'Stores fetched successfully',
-        data: result
+        data: storeResults
     });
 });
 

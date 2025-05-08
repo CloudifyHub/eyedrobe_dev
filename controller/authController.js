@@ -1,4 +1,5 @@
 const users = require('../db/models/users');
+const stores = require('../db/models/stores');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const catchAsync = require('../utils/catchAsync');
@@ -75,18 +76,18 @@ const login = catchAsync(async (req, res, next) => {
     }
 
     //check if user exists
-    const result = await users.findOne({
+    const user = await users.findOne({
         where: {
             email: email
         }
     });
 
-    if(!result){
+    if(!user){
         return next(new AppError('User not found', 400));
     }
 
     //check if password is correct
-    const isPasswordCorrect = await bcrypt.compare(password, result.password);
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if(!isPasswordCorrect){
         return next(new AppError('Invalid email or password', 400));
@@ -94,11 +95,11 @@ const login = catchAsync(async (req, res, next) => {
 
         //generate token
     const token = generateToken({
-        id: result.id,
+        id: user.id,
     });
 
     //remove the password from the result
-    const newResult = result.toJSON();
+    const newResult = user.toJSON();
     delete newResult.password;
     delete newResult.deletedAt;
     delete newResult.updatedAt;
@@ -112,14 +113,33 @@ const login = catchAsync(async (req, res, next) => {
     delete newResult.createdBy;
     delete newResult.updatedBy;
 
+    const store = await stores.findOne({
+        where: {
+            userId: user.id
+        }
+    });
 
+    if(!store){
+        newResult.store = 'no store found';
+    }
+
+    if(store){
+       const storeResult = store.toJSON();
+       delete storeResult.deletedAt;
+       delete storeResult.updatedAt;
+       delete storeResult.deletedBy;
+       delete storeResult.createdBy;
+       delete storeResult.updatedBy;
+       delete storeResult.userId;
+       newResult.store = storeResult;
+    }
 
 
     //return success response
     return res.status(200).json({
         status: 'success',
         message: 'Login successfully',
-        data: newResult, 
+        data: newResult,
         token: token
     });
 }); 

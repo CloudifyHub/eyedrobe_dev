@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const authRoute = require('./route/authRoute');
 const storeRoute = require('./route/storeRoute');
+const productRoute = require('./route/productRoute');
 const catchAsync = require('./utils/catchAsync');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
@@ -16,7 +17,7 @@ app.use(express.json());
 // Routes
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/store', storeRoute);
-
+app.use('/api/v1/product', productRoute);   
 
 // 404 handler for undefined routes
 app.use('', catchAsync(async (req, res, next) => {
