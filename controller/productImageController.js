@@ -23,7 +23,14 @@ const createProductImage = catchAsync(async (req, res, next) => {
         return next(new AppError('Product not found', 404));
     }
 
+    const productImagesCount = await productImages.count({
+        where: {productId: body.product_id},
+    });
 
+    if(productImagesCount >= 3){
+        return next(new AppError('You can include at most 3 images for a product', 400));
+    }
+    
     const newProductImage = await productImages.create({
         productId: body.product_id,
         url: body.url,
@@ -58,7 +65,6 @@ const deleteProductImage = catchAsync(async (req, res, next) => {
         return next(new AppError('Product image not found', 404));
     }   
 
-    await productImage.destroy();
 
     return res.status(200).json({
         status: 'success',
