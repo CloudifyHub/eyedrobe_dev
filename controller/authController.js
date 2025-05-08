@@ -31,6 +31,8 @@ const basicAuth = catchAsync(async (req, res, next) => {
     return next();
 });
 
+
+//generate token
 const generateToken = (payload) => {
     return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 }
