@@ -110,6 +110,10 @@ const updateStore = catchAsync(async (req, res, next) => {
     const storeId = req.params.id;
     const body = req.body;
 
+    if(!storeId){
+        return next(new AppError('Store ID is required', 400));
+    }
+
     if(!body.name || !body.location || !body.status || !body.description || !body.image){
         return next(new AppError('All fields are required', 400));
     }

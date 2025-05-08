@@ -2,6 +2,7 @@ require('dotenv').config({ path: `${process.cwd()}/.env` });
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const authRoute = require('./route/authRoute');
 const storeRoute = require('./route/storeRoute');
 const productRoute = require('./route/productRoute');
@@ -12,7 +13,7 @@ const globalErrorHandler = require('./controller/errorController');
 
 // Middleware
 app.use(express.json());
-
+app.use(cors());
 
 // Routes
 app.use('/api/v1/auth', authRoute);
