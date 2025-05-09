@@ -43,7 +43,7 @@ const signup = catchAsync(async (req, res, next) => {
     const body = req.body;
 
     //validate the request body
-    if(!body.email || !body.password || !body.firstName || !body.lastName || !body.userType || !body.confirmPassword){
+    if(!body.email || !body.password || !body.firstName || !body.lastName || !body.userType || !body.confirmPassword || !body.contactNumber){
         return next(new AppError('All fields are required', 400));
     }
 
@@ -58,7 +58,8 @@ const signup = catchAsync(async (req, res, next) => {
         firstName: body.firstName,
         lastName: body.lastName,
         userType: body.userType,
-        confirmPassword: body.confirmPassword
+        confirmPassword: body.confirmPassword,
+        contactNumber: body.contactNumber
     });
 
     //check if user is created
