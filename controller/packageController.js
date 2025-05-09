@@ -55,10 +55,108 @@ const createPackage = catchAsync(async (req, res, next) => {
         message: 'Package created successfully',
         data: packageResult
     });
+
 });
 
 
+const getPackages = catchAsync(async (req, res, next) => {
+        const allPackages = await packages.findAll();
+
+        if(!allPackages){
+            return next(new AppError('No packages found', 404));
+        }
+
+        if(allPackages.length === 0){
+            return next(new AppError('No packages found', 404));
+        }
+
+        const packageResult = allPackages.map(package => {
+            const allPackage = package.toJSON();
+            delete allPackage.deletedAt;
+            delete allPackage.updatedAt;
+            return allPackage;
+        });
+
+
+
+        res.status(200).json({
+            status: 'success',
+            message: 'Packages fetched successfully',
+            data: packageResult
+        });
+});
+
+const getPackageById = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const package = await packages.findByPk(id);
+    
+    if(!package){
+        return next(new AppError('Package not found', 404));
+    }
+
+    const packageResult = package.toJSON();
+    delete packageResult.deletedAt;
+    delete packageResult.updatedAt;
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Package fetched successfully',
+        data: packageResult
+    });
+
+});
+
+const updatePackage = catchAsync(async (req, res, next) => {
+    const { id } = req.params;
+    const { packageName, description, price, duration, discount } = req.body;
+    const package = await packages.findByPk(id);
+
+    if(!package){
+        return next(new AppError('Package not found', 404));
+    }
+
+    const updatedPackage = await package.update({
+        packageName, description, price, duration, discount
+    });
+
+    if(!updatedPackage){
+        return next(new AppError('Package not updated', 400));
+    }
+
+    const packageResult = updatedPackage.toJSON();
+    delete packageResult.deletedAt;
+    delete packageResult.updatedAt;
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Package updated successfully',
+        data: packageResult
+    });
+});
+
+const deletePackage = catchAsync(async (req, res, next) => {``
+    const { id } = req.params;
+    const package = await packages.findByPk(id);
+    
+    if(!package){
+        return next(new AppError('Package not found', 404));
+    }
+
+    await package.destroy();
+
+    res.status(200).json({
+        status: 'success',
+        message: 'Package deleted successfully'
+    });
+    
+    
+
+});
 
 module.exports = {
-    createPackage
+    createPackage,
+    getPackages,
+    getPackageById,
+    updatePackage,
+    deletePackage
 };
