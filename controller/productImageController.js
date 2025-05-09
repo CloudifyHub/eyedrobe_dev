@@ -7,6 +7,7 @@ const { products } = require('../db/models/products');
 const createProductImage = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
+    
     if(!body.product_id){
         return next(new AppError('Product ID is required', 400));
     }

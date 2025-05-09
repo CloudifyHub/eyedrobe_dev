@@ -11,6 +11,10 @@ const generateCode = require('random-code-generate')
 const createStore = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
+
+    if(!body){
+        return next(new AppError('No data provided', 400));
+    }
     
     if(!body.name || !body.location || !body.status || !body.description || !body.image){
         return next(new AppError('All fields are required', 400));

@@ -11,7 +11,7 @@ const catchAsync = require('./utils/catchAsync');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controller/errorController');
 const imageRoute = require('./route/imageRoute');
-
+const packageRoute = require('./route/packageRoute');
 
 // Middleware
 app.use(express.json());
@@ -23,6 +23,8 @@ app.use('/api/v1/store', storeRoute);
 app.use('/api/v1/product', productRoute);   
 app.use('/api/v1/product-image', productImageRoute);
 app.use('/api/v1/image', imageRoute);
+app.use('/api/v1/package', packageRoute);
+
 
 // 404 handler for undefined routes
 app.use('', catchAsync(async (req, res, next) => {

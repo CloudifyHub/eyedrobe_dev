@@ -10,6 +10,10 @@ const createProduct = catchAsync(async (req, res, next) => {
     const body = req.body;
     const userId = req.user.id;
 
+    if(!body){
+        return next(new AppError('No data provided', 400));
+    }
+
     if(!body.productName || !body.description || !body.category || !body.brand || !body.sku || !body.price || !body.stock || !body.storeId){
         return next(new AppError('All fields are required', 400));
     }
