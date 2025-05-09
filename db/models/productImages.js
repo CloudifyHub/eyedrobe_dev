@@ -2,8 +2,6 @@
 
 const {  Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../config/database');
-const bcrypt = require('bcrypt');
-const AppError = require('../../utils/appError');
 const { products } = require('./products');
 
 const productImages = sequelize.define('productImages', {

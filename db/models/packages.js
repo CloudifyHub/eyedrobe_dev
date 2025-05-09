@@ -2,7 +2,6 @@
 
 const {  Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../../config/database');
-const AppError = require('../../utils/appError');
 
 
 const packages = sequelize.define('packages', {

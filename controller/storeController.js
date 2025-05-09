@@ -1,10 +1,7 @@
 const stores = require('../db/models/stores');
 const users = require('../db/models/users');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const generateCode = require('random-code-generate')
 
 
 //create a store
