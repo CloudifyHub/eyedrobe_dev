@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const AppError = require('../../utils/appError');
 const { products } = require('./products');
 
-const productImages = sequelize.define('product_images', {
+const productImages = sequelize.define('productImages', {
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -41,7 +41,7 @@ const productImages = sequelize.define('product_images', {
   }
 }, {
   freezeTableName: true,
-  modelName: 'product_images',
+  modelName: 'productImages',
   timestamps: true,
   paranoid: true
 });

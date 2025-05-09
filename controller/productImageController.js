@@ -1,6 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const productImages = require('../db/models/product_images');
+const productImages = require('../db/models/productImages');
 const { products } = require('../db/models/products');
 
 

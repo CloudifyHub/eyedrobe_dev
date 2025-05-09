@@ -3,7 +3,7 @@ const users = require('../db/models/users');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { products } = require('../db/models/products');
-const  productImages  = require('../db/models/product_images');
+const  productImages  = require('../db/models/productImages');
 
 //create a product
 const createProduct = catchAsync(async (req, res, next) => {
