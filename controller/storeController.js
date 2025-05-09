@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const generateCode = require('random-code-generate')
 
 
 //create a store
@@ -28,6 +29,11 @@ const createStore = catchAsync(async (req, res, next) => {
         return next(new AppError('User already has a store', 400));
     }
 
+    //const tenantId = 'kiosk' + generateCode.generateRandom(10);
+    let formattedName = body.name.replace(/\./g, '')       // remove period
+                    .trim()                   // remove whitespace
+                    .replace(/\s+/g, '_'); 
+
     const newStore = await stores.create({
         userId: userId,
         name: body.name,
@@ -35,7 +41,8 @@ const createStore = catchAsync(async (req, res, next) => {
         status: body.status,
         description: body.description,
         image: body.image,
-        createdBy: userId
+        createdBy: userId,
+        tenantId: formattedName.toLowerCase()
     });
 
     if(!newStore){

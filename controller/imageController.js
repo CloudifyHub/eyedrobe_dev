@@ -27,14 +27,10 @@ const uploadImage = catchAsync(async (req, res, next) => {
     const b64 = Buffer.from(req.file.buffer).toString('base64');
     const dataURI = `data:${req.file.mimetype};base64,${b64}`;
 
-    // Upload to cloudinary
-    const uploadResult = await cloudinary.uploader.upload(dataURI, {
-        folder: 'images',
-        resource_type: 'auto'
-    });
 
     // Get product id from params
     const productId = req.params.productId;
+
 
     const productRecord = await products.findOne({
         where: {
@@ -47,12 +43,28 @@ const uploadImage = catchAsync(async (req, res, next) => {
         return next(new AppError('Product not found', 404));
     }
 
+    // Check if product image limit reached
+    const countProductImages = await productImages.count({
+        where: {
+            productId: productId
+        }
+    });
+
+    if(countProductImages >= 5){
+        return next(new AppError('Product image limit reached', 400));
+    }
+
+  // Upload to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(dataURI, {
+        folder: 'images',
+        resource_type: 'auto'
+    });
+
     // Create product image
     const productImageRecord = await productImages.create({
         url: uploadResult.secure_url,
         productId: productId
     });
-
 
 
     if (!productImageRecord) {
@@ -63,6 +75,7 @@ const uploadImage = catchAsync(async (req, res, next) => {
     // Send response
     res.status(200).json({
         status: 'success',
+        message: 'Product image created successfully',
         imageUrl: uploadResult.secure_url
     });
 });
