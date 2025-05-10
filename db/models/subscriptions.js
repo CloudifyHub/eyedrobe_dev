@@ -69,5 +69,7 @@ const subscriptions = sequelize.define('subscriptions', {
   paranoid: true
 });
 
+subscriptions.belongsTo(packages, { foreignKey: 'packageId' });
+subscriptions.belongsTo(users, { foreignKey: 'userId' });
 
 module.exports = subscriptions;
